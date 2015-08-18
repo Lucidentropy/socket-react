@@ -1,3 +1,96 @@
+var App = React.createClass({
+    getInitialState: function(){
+        return {
+            users : ['Nobody', 'Somebody', 'Bob']
+        };
+    },
+    componentDidMount: function () {
+        var self = this;
+        
+        this.socket = io.connect(window.location);
+        this.socket.on('test', function() {
+           self.socketytest();
+        });
+
+
+    },
+    render: function(){
+        return(
+            <div id="reactChat">
+                <UserList users={this.state.users}/>
+            </div>
+        );
+    },
+    socketytest : function(){
+        console.warn('socketytest');
+        this.setState({users: users.push('Test')});
+    }
+});
+
+
+var UserList = React.createClass({
+    render: function(){
+
+        var userslist = [];
+        $.each(this.props.users, function(k,username){
+            userslist.push(<User username={username} />);
+        })
+
+        return(
+            <div className="userlist">
+                <h3>Users below</h3>
+                {userslist}
+                <DebugButton addDebugUser={this.addDebugUser} />
+            </div>
+        );
+    },
+    addUser : function(){
+        console.warn('aaaaa');
+    }
+});
+
+var User = React.createClass({
+    render: function(){
+        return(
+            <div className="a-user">
+                {this.props.username}
+            </div>
+        );
+    }
+});
+
+
+var DebugButton = React.createClass({
+    render: function(){
+        return(
+            <button onClick={this.addDebugUser}>Add Debug User</button>
+        );
+    },
+    addDebugUser: function(){
+        this.socket.emit('test');
+    }
+});
+
+
+$(function(){
+    React.render(<App />, $('#react')[0]);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function update_log(v) {
     var chat = $('div.log');
 
@@ -78,53 +171,3 @@ $(function() {
         return false;
     });
 });
-
-
-var App = React.createClass({
-    getInitialState: function(){
-        return {
-            users : ['Nobody', 'Somebody', 'Bob']
-        };
-    },
-
-    render: function(){
-        return(
-            <div id="reactChat">
-                <UserList users={this.state.users}/>
-            </div>
-        );
-    }
-});
-
-
-var UserList = React.createClass({
-    render: function(){
-
-        var userslist = [];
-        $.each(this.props.users, function(k,username){
-            userslist.push(<User username={username} />);
-        })
-
-        return(
-            <div className="userlist">
-                <h3>Users below</h3>
-                {userslist}
-            </div>
-        );
-    },
-    addUser : function(){
-        console.warn('aaaaa');
-    }
-});
-
-var User = React.createClass({
-    render: function(){
-        return(
-            <div className="a-user">
-                {this.props.username}
-            </div>
-        );
-    }
-});
-
-React.render(<App />, $('#react')[0]);
