@@ -1,0 +1,7 @@
+[Nn]ode_modules
+.sass-cache
+
+[Ss]earchIndex
+**/App_Data/Temp/
+
+_local/**/*.*
